@@ -7,35 +7,43 @@
 <meta name="description" content="Solutions Architect working on Kubernetes networking and security. Pre-sales architecture, platform automation, and AI-augmented delivery.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231d4ed8'/><text x='50' y='68' font-size='52' font-family='Georgia,serif' fill='white' text-anchor='middle'>AR</text></svg>">
 <style>
+/* Palette: warm paper and ink with a deep teal accent and terracotta as a rare
+   second voice. Near-black instead of black, cream instead of white, so the page
+   reads calm rather than clinical. */
 :root{
-  --bg:#ffffff; --bg-alt:#f6f7f9; --bg-card:#ffffff;
-  --fg:#14171c; --fg-mid:#4a515c; --fg-dim:#767e8b;
-  --line:#e2e5ea; --line-strong:#cfd4dc;
-  --accent:#1d4ed8; --accent-soft:#eef2ff;
+  --bg:#faf8f3; --bg-alt:#f3efe6; --bg-card:#fffefb;
+  --fg:#1a1c19; --fg-mid:#545750; --fg-dim:#66695f;
+  --line:#e7e1d5; --line-strong:#d5cec0;
+  --accent:#0f6b66; --accent-soft:#e4efed; --accent-2:#b3603a;
+  --grain:.028;
   --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
-  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
-  --serif:Georgia,"Times New Roman",serif;
+  --sans:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
+  --serif:ui-serif,"New York","Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
   --maxw:1080px;
+  --ease:cubic-bezier(.22,.61,.36,1);
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
-    --bg:#0f1115; --bg-alt:#14171d; --bg-card:#16191f;
-    --fg:#e8ebf0; --fg-mid:#a8b0bd; --fg-dim:#7b8494;
-    --line:#242932; --line-strong:#333a45;
-    --accent:#6f96ff; --accent-soft:#161d2e;
+    --bg:#141512; --bg-alt:#1a1b17; --bg-card:#1c1d19;
+    --fg:#eceae2; --fg-mid:#a8aa9e; --fg-dim:#7f8177;
+    --line:#292a24; --line-strong:#3a3c33;
+    --accent:#62c3b8; --accent-soft:#16241f; --accent-2:#e0956a;
+    --grain:.05;
   }
 }
 :root[data-theme="dark"]{
-  --bg:#0f1115; --bg-alt:#14171d; --bg-card:#16191f;
-  --fg:#e8ebf0; --fg-mid:#a8b0bd; --fg-dim:#7b8494;
-  --line:#242932; --line-strong:#333a45;
-  --accent:#6f96ff; --accent-soft:#161d2e;
+  --bg:#141512; --bg-alt:#1a1b17; --bg-card:#1c1d19;
+  --fg:#eceae2; --fg-mid:#a8aa9e; --fg-dim:#7f8177;
+  --line:#292a24; --line-strong:#3a3c33;
+  --accent:#62c3b8; --accent-soft:#16241f; --accent-2:#e0956a;
+  --grain:.05;
 }
 :root[data-theme="light"]{
-  --bg:#ffffff; --bg-alt:#f6f7f9; --bg-card:#ffffff;
-  --fg:#14171c; --fg-mid:#4a515c; --fg-dim:#767e8b;
-  --line:#e2e5ea; --line-strong:#cfd4dc;
-  --accent:#1d4ed8; --accent-soft:#eef2ff;
+  --bg:#faf8f3; --bg-alt:#f3efe6; --bg-card:#fffefb;
+  --fg:#1a1c19; --fg-mid:#545750; --fg-dim:#66695f;
+  --line:#e7e1d5; --line-strong:#d5cec0;
+  --accent:#0f6b66; --accent-soft:#e4efed; --accent-2:#b3603a;
+  --grain:.028;
 }
 
 *{box-sizing:border-box}
@@ -44,6 +52,23 @@ body{
   margin:0; background:var(--bg); color:var(--fg);
   font-family:var(--sans); font-size:16.5px; line-height:1.65;
   -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+/* Paper grain. Inline SVG turbulence, so still zero network requests. */
+body::before{
+  content:""; position:fixed; inset:0; z-index:9999; pointer-events:none;
+  opacity:var(--grain); mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) body::before{mix-blend-mode:screen} }
+:root[data-theme="dark"] body::before{mix-blend-mode:screen}
+
+/* Scroll reveal. Opt-in per element, disabled for reduced-motion. */
+.rv{opacity:0; transform:translateY(16px); transition:opacity .7s var(--ease), transform .7s var(--ease)}
+.rv.in{opacity:1; transform:none}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .rv{opacity:1 !important; transform:none !important; transition:none}
+  *{animation-duration:.001s !important}
 }
 a{color:var(--accent); text-decoration:none}
 a:hover{text-decoration:underline}
@@ -78,8 +103,13 @@ header.hero{padding:84px 0 64px; border-bottom:1px solid var(--line)}
   color:var(--accent); margin:0 0 18px;
 }
 h1{
-  font-family:var(--serif); font-weight:600; font-size:clamp(34px,5.4vw,52px);
-  line-height:1.12; letter-spacing:-.5px; margin:0 0 6px;
+  font-family:var(--serif); font-weight:500; font-size:clamp(40px,7.2vw,74px);
+  line-height:1.04; letter-spacing:-1.6px; margin:0 0 10px;
+}
+/* Hairline rule under the eyebrow, terracotta as the rare second voice. */
+.eyebrow::after{
+  content:""; display:block; width:34px; height:2px; margin-top:14px;
+  background:var(--accent-2); border-radius:2px;
 }
 .role{font-size:clamp(17px,2.2vw,20px); color:var(--fg-mid); margin:0 0 26px}
 .lede{font-size:clamp(17px,2vw,19.5px); color:var(--fg-mid); max-width:62ch; margin:0 0 32px}
@@ -102,14 +132,15 @@ h1{
 }
 .stat{padding:26px 28px; border-right:1px solid var(--line)}
 .stat:last-child{border-right:none}
-.stat b{display:block; font-family:var(--serif); font-size:29px; line-height:1.1; font-weight:600}
+.stat b{display:block; font-family:var(--serif); font-size:32px; line-height:1.1; font-weight:500; letter-spacing:-.6px; color:var(--accent)}
 .stat span{font-size:13px; color:var(--fg-dim); display:block; margin-top:5px}
 
 /* ---------- sections ---------- */
 section{padding:72px 0; border-bottom:1px solid var(--line)}
 .sec-head{margin-bottom:38px}
 .sec-num{font-family:var(--mono); font-size:12px; color:var(--fg-dim); letter-spacing:.1em}
-h2{font-family:var(--serif); font-weight:600; font-size:clamp(25px,3.4vw,32px); letter-spacing:-.3px; margin:6px 0 10px}
+h2{font-family:var(--serif); font-weight:500; font-size:clamp(27px,3.9vw,38px); letter-spacing:-.8px; margin:6px 0 12px}
+.card h3, .tl h3{letter-spacing:-.3px}
 .sec-sub{color:var(--fg-mid); max-width:64ch; margin:0; font-size:16px}
 
 /* pillars */
@@ -128,8 +159,22 @@ h2{font-family:var(--serif); font-weight:600; font-size:clamp(25px,3.4vw,32px); 
 .card{
   border:1px solid var(--line); border-radius:13px; background:var(--bg-card);
   padding:27px 28px; position:relative;
+  transition:border-color .35s var(--ease), transform .35s var(--ease), box-shadow .35s var(--ease);
 }
-.card.flag{border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.card:hover{
+  border-color:var(--line-strong); transform:translateY(-2px);
+  box-shadow:0 10px 30px -18px rgba(26,28,25,.28);
+}
+.card.flag{
+  border-color:var(--accent);
+  box-shadow:0 0 0 1px var(--accent-soft), 0 8px 28px -20px rgba(15,107,102,.5);
+}
+.card.flag:hover{box-shadow:0 0 0 1px var(--accent-soft), 0 14px 34px -18px rgba(15,107,102,.55)}
+/* A hairline of accent along the flagship card's leading edge. */
+.card.flag::before{
+  content:""; position:absolute; left:-1px; top:22px; bottom:22px; width:3px;
+  border-radius:3px; background:var(--accent);
+}
 .card-top{display:flex; align-items:flex-start; gap:14px; flex-wrap:wrap; margin-bottom:5px}
 .card h3{font-family:var(--serif); font-size:21.5px; font-weight:600; margin:0; letter-spacing:-.2px}
 .card .kicker{font-family:var(--mono); font-size:11.5px; color:var(--fg-dim); letter-spacing:.08em; text-transform:uppercase; margin:0 0 12px}
@@ -519,26 +564,42 @@ footer h2{margin-bottom:12px}
 
       <article class="card">
         <div class="card-top">
-          <h3>Field enablement and campaign repositories</h3>
-          <div class="tags"><span class="tag">public</span><span class="tag">authored 2025</span></div>
+          <h3>Making the demo experience worth watching</h3>
+          <div class="tags"><span class="tag">many repos</span><span class="tag">marketing &amp; field enablement</span></div>
         </div>
-        <p class="kicker">Customer-facing PoC blueprints and demo kits</p>
+        <p class="kicker">Guided PoC blueprints and demo kits</p>
         <p>
-          A body of public, hands-on repositories written for marketing campaigns and global
-          SA and partner enablement. Each one takes a reader from an empty cloud account to a
-          secured, observable microservices application, with teardown steps that actually
-          work. Sole author on all five.
+          I have written a lot of these: hands-on repositories that take an operator from an
+          empty cloud account to a secured, observable microservices application, built for
+          marketing campaigns and for global SA and partner enablement.
         </p>
-        <ul class="repo-list">
-          <li><code>cc-gke-demo</code><span>Calico Cloud PoC blueprint on GKE, microsegmentation and observability</span></li>
-          <li><code>demokit</code><span>Platform-agnostic PoC blueprint with validation steps</span></li>
-          <li><code>sa-cc-igw</code><span>Ingress Gateway demo on Amazon EKS for fast, reproducible customer sessions</span></li>
-          <li><code>rosa-ce-preflight</code><span>Read-only diagnostic collector that verifies ROSA prerequisites before install</span></li>
-          <li><code>calico-cloud-demokit</code><span>Kubernetes demo kit for microsegmentation, observability and threat defence</span></li>
-        </ul>
+        <p>
+          The interesting part was not the Kubernetes. It was realising that a demo repository
+          is a <strong>performance, not a manual</strong>. A wall of a hundred kubectl commands
+          teaches nothing, because the person running it has no idea what just happened or why
+          it mattered.
+        </p>
+        <dl class="detail">
+          <dt>So I gamified the run</dt>
+          <dd>
+            Every script narrates itself. Echoed cues set up what is about to happen and what
+            to watch for, then confirm what changed. The flow is paced in beats: establish the
+            working baseline, break something on purpose, show the blast radius, apply the
+            control, prove the blast radius shrank. Checkpoints between beats so nobody
+            proceeds on a broken cluster. Validation scripts that assert the expected outcome
+            rather than trusting it. Teardown that actually removes everything, because the
+            demo you cannot cleanly delete is the demo nobody runs twice.
+          </dd>
+          <dt>Why it mattered</dt>
+          <dd>
+            It turned a wall of commands into a story an SA could narrate live to a customer
+            without rehearsing, and made the repos usable by partners who had never touched
+            the product. Adopted across global SA and partner enablement teams.
+          </dd>
+        </dl>
         <p style="margin-top:16px; font-size:14.3px; color:var(--fg-dim)">
-          These shipped for specific campaigns and are no longer maintained. Listed as
-          authored work rather than active projects.
+          Built for specific campaigns and cycles rather than as long-lived software. Listed as
+          authored work, not active projects.
         </p>
       </article>
 
@@ -807,7 +868,7 @@ footer h2{margin-bottom:12px}
     <div class="cta">
       <a class="btn primary" href="mailto:hellorao.ca@gmail.com">hellorao.ca@gmail.com</a>
       <a class="btn" href="https://github.com/raoket">GitHub</a>
-      <a class="btn" href="LINKEDIN_URL_HERE">LinkedIn</a>
+      <a class="btn" href="https://www.linkedin.com/in/iabhishekrao/">LinkedIn</a>
       <a class="btn" href="https://medium.com/@rao-simplifies">Medium</a>
       <a class="btn" href="Abhishek-Rao-Resume.pdf">Résumé (PDF)</a>
     </div>
@@ -835,6 +896,24 @@ footer h2{margin-bottom:12px}
     paint(next);
     try{ localStorage.setItem('theme',next); }catch(e){}
   });
+
+  /* Scroll reveal. Tag the things worth revealing, then fade them up once. */
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var targets = document.querySelectorAll('.sec-head, .card, .pillar, .method, .tl > li, .skill, .stat');
+  if(reduce || !('IntersectionObserver' in window)){
+    targets.forEach(function(el){ el.classList.add('in'); });
+    return;
+  }
+  targets.forEach(function(el,i){
+    el.classList.add('rv');
+    el.style.transitionDelay = ((i % 4) * 60) + 'ms';
+  });
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, {rootMargin:'0px 0px -8% 0px', threshold:.08});
+  targets.forEach(function(el){ io.observe(el); });
 })();
 </script>
 </body>
