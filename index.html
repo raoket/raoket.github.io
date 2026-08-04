@@ -506,7 +506,7 @@ footer h2{margin-bottom:12px}
       <span class="sec-num">02</span>
       <h2>Selected work</h2>
       <p class="sec-sub">
-        Four things worth showing. One is live and public, two are systems I built end to
+        Five things worth showing. One is live and public, three are systems I built end to
         end, and one is a body of published enablement material.
       </p>
     </div>
@@ -647,6 +647,57 @@ footer h2{margin-bottom:12px}
         <p style="margin-top:16px; font-size:14.3px; color:var(--fg-dim)">
           Private work. Happy to walk through the design and the decisions behind it in
           conversation.
+        </p>
+      </article>
+
+      <article class="card">
+        <div class="card-top">
+          <h3>Calico Intelligence</h3>
+          <div class="tags"><span class="tag arch">prototype</span><span class="tag">CrewAI &middot; MCP</span><span class="tag">2026</span></div>
+        </div>
+        <p class="kicker">Agentic diagnostics for support bundles &middot; Python / FastAPI / React</p>
+        <p>
+          Upload a customer diagnostic bundle, get triage back. A multi-agent pipeline reads
+          the archive, works out which components are actually unhealthy, gathers only the
+          evidence that bears on the problem, and writes up what it found. Built as a
+          <strong>FastAPI service with a React front end</strong> and a five-stage crew:
+          read, triage, gather evidence, validate, report.
+        </p>
+        <p>
+          The domain knowledge lives in code rather than in a prompt. A component map covers
+          the whole stack, apiserver through typha, kube-controllers, manager, log storage and
+          its several aliases, compliance, intrusion detection, guardian and monitoring, and a
+          health model reasons over available, progressing and degraded rather than
+          pattern-matching log lines.
+        </p>
+        <dl class="detail">
+          <dt>The hard part was token economics, not diagnosis</dt>
+          <dd>
+            A diagnostic bundle runs to hundreds of megabytes and a model can see a fraction
+            of one percent of it, so <em>which</em> fraction is the entire problem. I gave it a
+            per-file size cap, a fixed evidence budget, tail-line limits, and seed globs so the
+            highest-value files, cluster version and node state, get read before anything else
+            competes for the context.
+          </dd>
+          <dt>The model does not get the last word</dt>
+          <dd>
+            A deterministic validator grades every answer before it is returned. It has to cite
+            real file paths out of the bundle and show its evidence in fenced blocks, and if it
+            fails either check the response comes back with the gaps called out rather than
+            reading like a clean finding. Rules rather than a second model on purpose: the
+            check needs to be cheap, repeatable and explainable to whoever reads the output.
+          </dd>
+          <dt>Where it led</dt>
+          <dd>
+            It talks to a hosted documentation MCP server over SSE and adapts that server's
+            tool schemas into the model's own function-calling format. That experiment is the
+            direct ancestor of the Calico MCP server now wired into my daily workflow, which
+            is the part of this project I got the most out of.
+          </dd>
+        </dl>
+        <p style="margin-top:16px; font-size:14.3px; color:var(--fg-dim)">
+          Built on Gemini 2.0 Flash at the time. A working prototype rather than a shipped
+          product, and the reason I knew what the production version needed to be.
         </p>
       </article>
 
@@ -948,11 +999,12 @@ footer h2{margin-bottom:12px}
       <div class="mrow">
         <dt>Agents as instruments, not oracles</dt>
         <dd>
-          I built <span class="hl">four production Claude Code skills</span> and wired <span class="hl">two MCP servers</span> into my daily
-          workflow: cluster diagnostics against live clusters, Jira issue filing from triage
-          threads, meeting analysis, and branded document generation. Model output gets
-          verified against the live cluster or the flow logs before it reaches a customer,
-          never trusted on its own.
+          The tooling I run on is tooling I wrote: <span class="hl">four Claude Code skills</span> for issue filing,
+          meeting analysis and document generation, a <span class="hl">multi-agent diagnostic service</span> for
+          support bundles, a local-first meeting stack, and <span class="hl">two MCP servers</span> wired into the
+          daily workflow, one of them talking to live clusters. Model output gets verified
+          against the cluster or the flow logs before it reaches a customer, never trusted on
+          its own.
         </dd>
       </div>
       <div class="mrow">
