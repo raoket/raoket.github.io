@@ -166,11 +166,14 @@ h1{
   /* No max-width: the 52ch cap was forcing a second line. Let it use the column. */
   max-width:none; text-wrap:balance;
 }
-.cta{display:flex; flex-wrap:wrap; gap:11px}
+.cta{display:flex; flex-wrap:wrap; gap:11px; align-items:stretch}
 .btn{
-  display:inline-flex; align-items:center; gap:8px;
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
   padding:10px 17px; border-radius:9px; font-size:14.5px; font-weight:500;
   border:1px solid var(--line-strong); color:var(--fg-mid); background:var(--bg-card);
+  /* Explicit line-height: a <button> would otherwise use the UA default while
+     the <a> siblings inherit 1.65 from body, leaving the button visibly shorter. */
+  line-height:1.6; white-space:nowrap;
 }
 .btn:hover{border-color:var(--fg-dim); color:var(--fg); text-decoration:none}
 .btn.primary{background:var(--accent); border-color:var(--accent); color:#fff}
@@ -192,8 +195,9 @@ h1{
 }
 
 /* ---------- email popover ---------- */
-.email-wrap{position:relative; display:inline-block}
-button.btn{font-family:inherit; cursor:pointer}
+.email-wrap{position:relative; display:inline-flex}
+.email-wrap > .btn{width:100%}
+button.btn{font-family:inherit; cursor:pointer; -webkit-appearance:none; appearance:none; margin:0}
 .email-pop{
   position:absolute; top:calc(100% + 9px); left:0; z-index:60; min-width:255px;
   background:var(--bg-card); border:1px solid var(--line-strong); border-radius:11px;
