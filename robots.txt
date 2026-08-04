@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Keep the résumé out of search indexes. It carries contact details, and a PDF
+# sitting in Google's cache is far harder to walk back than one that was never
+# crawled. The file stays reachable to anyone who visits the site.
+Disallow: /Abhishek-Rao-Resume.pdf

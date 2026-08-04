@@ -189,6 +189,31 @@ h1{
   .hero-photo img{width:124px; height:124px; border-radius:15px}
 }
 
+/* ---------- email popover ---------- */
+.email-wrap{position:relative; display:inline-block}
+button.btn{font-family:inherit; cursor:pointer}
+.email-pop{
+  position:absolute; top:calc(100% + 9px); left:0; z-index:60; min-width:255px;
+  background:var(--bg-card); border:1px solid var(--line-strong); border-radius:11px;
+  padding:14px; box-shadow:0 18px 44px -20px rgba(26,28,25,.45);
+}
+.email-pop[hidden]{display:none}
+.email-addr{
+  display:block; font-family:var(--mono); font-size:13.5px; color:var(--fg);
+  background:var(--bg-alt); border:1px solid var(--line); border-radius:7px;
+  padding:9px 11px; margin-bottom:10px; user-select:all; word-break:break-all;
+}
+.email-acts{display:flex; gap:8px}
+.mini{
+  font:inherit; font-size:13px; font-weight:500; cursor:pointer;
+  padding:7px 12px; border-radius:7px; border:1px solid var(--line-strong);
+  background:var(--bg); color:var(--fg-mid); text-decoration:none;
+}
+.mini:hover{color:var(--fg); border-color:var(--fg-dim); text-decoration:none}
+.mini.go{background:var(--accent); border-color:var(--accent); color:#fff}
+.mini.go:hover{color:#fff; filter:brightness(1.08)}
+.mini[data-ok]{background:var(--hl-bg); border-color:var(--accent); color:var(--accent)}
+
 /* ---------- stats ---------- */
 .stats{
   display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
@@ -395,10 +420,19 @@ footer h2{margin-bottom:12px}
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.7v-2.6c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7 0-.7 0-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.2.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17 4.1 18 4.4 18 4.4c.6 1.7.2 2.9.1 3.2.7.8 1.2 1.9 1.2 3.1 0 4.7-2.8 5.7-5.5 6 .4.4.8 1.1.8 2.2v3.3c0 .4.2.8.8.7A12 12 0 0 0 12 .3z"/></svg>
         GitHub
       </a>
-      <a class="btn" href="mailto:hellorao.ca@gmail.com">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
-        Email
-      </a>
+      <span class="email-wrap">
+        <button class="btn" id="emailBtn" type="button" aria-expanded="false" aria-controls="emailPop">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
+          Email
+        </button>
+        <span class="email-pop" id="emailPop" hidden>
+          <span class="email-addr" id="emailAddr">hellorao.ca@gmail.com</span>
+          <span class="email-acts">
+            <button class="mini go" type="button" id="copyBtn">Copy address</button>
+            <a class="mini" href="mailto:hellorao.ca@gmail.com">Open mail app</a>
+          </span>
+        </span>
+      </span>
       <a class="btn" href="Abhishek-Rao-Resume.pdf" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v12M7 11l5 5 5-5M4 21h16"/></svg>
         Résumé
@@ -948,8 +982,9 @@ footer h2{margin-bottom:12px}
     </p>
     <div class="cta">
       <a class="btn primary" href="mailto:hellorao.ca@gmail.com">hellorao.ca@gmail.com</a>
+      <button class="btn" type="button" id="copyBtn2">Copy address</button>
       <a class="btn" href="https://github.com/raoket" target="_blank" rel="noopener noreferrer">GitHub</a>
-      <a class="btn" href="https://www.linkedin.com/in/iabhishekrao/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a class="btn" href="https://www.linkedin.com/in/iabhishekrao/" target="_blank" rel="noopener noreferrer">Message me on LinkedIn</a>
       <a class="btn" href="https://medium.com/@rao-simplifies" target="_blank" rel="noopener noreferrer">Medium</a>
       <a class="btn" href="Abhishek-Rao-Resume.pdf" target="_blank" rel="noopener">Résumé (PDF)</a>
     </div>
@@ -977,6 +1012,46 @@ footer h2{margin-bottom:12px}
     var next=root.getAttribute('data-theme')==='dark'?'light':'dark';
     paint(next);
     try{ localStorage.setItem('theme',next); }catch(e){}
+  });
+
+  /* Email: not everyone has a mail client wired up, so offer the address itself
+     alongside the mailto rather than relying on the handler firing. */
+  var eBtn=document.getElementById('emailBtn'), ePop=document.getElementById('emailPop');
+  var ADDR='hellorao.ca@gmail.com';
+  function closePop(){ if(!ePop) return; ePop.hidden=true; eBtn.setAttribute('aria-expanded','false'); }
+  if(eBtn && ePop){
+    eBtn.addEventListener('click', function(ev){
+      ev.stopPropagation();
+      var open = ePop.hidden;
+      ePop.hidden = !open;
+      eBtn.setAttribute('aria-expanded', String(open));
+    });
+    ePop.addEventListener('click', function(ev){ ev.stopPropagation(); });
+    document.addEventListener('click', closePop);
+    document.addEventListener('keydown', function(ev){ if(ev.key==='Escape') closePop(); });
+  }
+  function copyAddr(btn){
+    var label=btn.textContent;
+    function done(ok){
+      btn.textContent = ok ? 'Copied' : 'Press Cmd+C';
+      if(ok) btn.setAttribute('data-ok','1');
+      setTimeout(function(){ btn.textContent=label; btn.removeAttribute('data-ok'); }, 1900);
+    }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(ADDR).then(function(){done(true);}, function(){fallback();});
+    } else { fallback(); }
+    function fallback(){
+      var node=document.getElementById('emailAddr');
+      try{
+        var r=document.createRange(); r.selectNodeContents(node);
+        var sel=window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
+        done(document.execCommand && document.execCommand('copy'));
+      }catch(e){ done(false); }
+    }
+  }
+  ['copyBtn','copyBtn2'].forEach(function(id){
+    var b=document.getElementById(id);
+    if(b) b.addEventListener('click', function(ev){ ev.stopPropagation(); copyAddr(b); });
   });
 
   /* Scroll reveal. Tag the things worth revealing, then fade them up once. */
