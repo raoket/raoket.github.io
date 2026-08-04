@@ -158,6 +158,20 @@ h1{
 .btn.primary:hover{filter:brightness(1.08); color:#fff}
 .btn svg{width:15px; height:15px; flex:0 0 auto}
 
+/* ---------- hero portrait ---------- */
+.hero-grid{display:grid; grid-template-columns:1fr auto; gap:60px; align-items:center}
+.hero-photo{margin:0}
+.hero-photo img{
+  width:216px; height:216px; display:block; border-radius:20px; object-fit:cover;
+  border:1px solid var(--line-strong);
+  box-shadow:0 16px 44px -24px rgba(26,28,25,.5);
+}
+@media (max-width:860px){
+  .hero-grid{grid-template-columns:1fr; gap:30px}
+  .hero-photo{order:-1}
+  .hero-photo img{width:124px; height:124px; border-radius:15px}
+}
+
 /* ---------- stats ---------- */
 .stats{
   display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
@@ -336,7 +350,8 @@ footer h2{margin-bottom:12px}
 </nav>
 
 <header class="hero" id="top">
-  <div class="wrap">
+  <div class="wrap hero-grid">
+   <div class="hero-text">
     <p class="eyebrow">Vancouver, BC &nbsp;·&nbsp; Kubernetes networking &amp; security</p>
     <h1>Abhishek Rao</h1>
     <p class="role">Solutions Architect at Tigera, the company behind Project Calico</p>
@@ -351,7 +366,7 @@ footer h2{margin-bottom:12px}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
         Selected work
       </a>
-      <a class="btn" href="https://github.com/raoket">
+      <a class="btn" href="https://github.com/raoket" target="_blank" rel="noopener noreferrer">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.7v-2.6c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7 0-.7 0-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.2.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17 4.1 18 4.4 18 4.4c.6 1.7.2 2.9.1 3.2.7.8 1.2 1.9 1.2 3.1 0 4.7-2.8 5.7-5.5 6 .4.4.8 1.1.8 2.2v3.3c0 .4.2.8.8.7A12 12 0 0 0 12 .3z"/></svg>
         GitHub
       </a>
@@ -359,17 +374,21 @@ footer h2{margin-bottom:12px}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
         Email
       </a>
-      <a class="btn" href="Abhishek-Rao-Resume.pdf">
+      <a class="btn" href="Abhishek-Rao-Resume.pdf" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v12M7 11l5 5 5-5M4 21h16"/></svg>
         Résumé
       </a>
     </div>
+   </div>
+   <figure class="hero-photo">
+     <img src="portrait.jpg" alt="Abhishek Rao" width="216" height="216" decoding="async">
+   </figure>
   </div>
 </header>
 
 <div class="stats">
   <div class="wrap" style="display:contents">
-    <div class="stat"><b>140+</b><span>sole-authored commits across 8 projects</span></div>
+    <div class="stat"><b>10</b><span>years in networking and infrastructure</span></div>
     <div class="stat"><b>15+</b><span>customer PoCs led</span></div>
     <div class="stat"><b>45+</b><span>demos &amp; workshops delivered</span></div>
     <div class="stat"><b>4</b><span>articles published on Kubernetes security</span></div>
@@ -467,7 +486,7 @@ footer h2{margin-bottom:12px}
           </dd>
         </dl>
         <div class="card-links">
-          <a href="https://www.tigera.io/calico-interactive-reference-architecture/">
+          <a href="https://www.tigera.io/calico-interactive-reference-architecture/" target="_blank" rel="noopener noreferrer">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>
             See it live on tigera.io
           </a>
@@ -732,7 +751,7 @@ footer h2{margin-bottom:12px}
           VKS platform work I did with a partner engineering team.
         </p>
         <div class="card-links">
-          <a href="https://www.tigera.io/blog/vmware-vks-calico-secure-networking/">Read on tigera.io</a>
+          <a href="https://www.tigera.io/blog/vmware-vks-calico-secure-networking/" target="_blank" rel="noopener noreferrer">Read on tigera.io</a>
         </div>
       </article>
 
@@ -747,7 +766,7 @@ footer h2{margin-bottom:12px}
           an allowlist, so this is the piece I send ahead of that conversation.
         </p>
         <div class="card-links">
-          <a href="https://medium.com/tigera/kubernetes-egress-explained-properly-the-three-designs-that-actually-matter-df8e2609f442">Read on Medium</a>
+          <a href="https://medium.com/tigera/kubernetes-egress-explained-properly-the-three-designs-that-actually-matter-df8e2609f442" target="_blank" rel="noopener noreferrer">Read on Medium</a>
         </div>
       </article>
 
@@ -762,7 +781,7 @@ footer h2{margin-bottom:12px}
           than just logging it.
         </p>
         <div class="card-links">
-          <a href="https://medium.com/tigera/https-medium-com-hellorao-ca-securing-ai-workloads-kubernetes-a6108aa92387">Read on Medium</a>
+          <a href="https://medium.com/tigera/https-medium-com-hellorao-ca-securing-ai-workloads-kubernetes-a6108aa92387" target="_blank" rel="noopener noreferrer">Read on Medium</a>
         </div>
       </article>
 
@@ -777,15 +796,15 @@ footer h2{margin-bottom:12px}
           you cannot get approved.
         </p>
         <div class="card-links">
-          <a href="https://medium.com/tigera/nginx-is-retiring-whats-next-e6543c7ed615">Read on Medium</a>
+          <a href="https://medium.com/tigera/nginx-is-retiring-whats-next-e6543c7ed615" target="_blank" rel="noopener noreferrer">Read on Medium</a>
         </div>
       </article>
     </div>
 
     <p style="margin-top:24px; font-size:14.5px; color:var(--fg-mid)">
       Full index on my
-      <a href="https://www.tigera.io/blog/author/abhishek-rao/">Tigera author page</a>
-      and on <a href="https://medium.com/@rao-simplifies">Medium</a>.
+      <a href="https://www.tigera.io/blog/author/abhishek-rao/" target="_blank" rel="noopener noreferrer">Tigera author page</a>
+      and on <a href="https://medium.com/@rao-simplifies" target="_blank" rel="noopener noreferrer">Medium</a>.
     </p>
   </div>
 </section>
@@ -903,10 +922,10 @@ footer h2{margin-bottom:12px}
     </p>
     <div class="cta">
       <a class="btn primary" href="mailto:hellorao.ca@gmail.com">hellorao.ca@gmail.com</a>
-      <a class="btn" href="https://github.com/raoket">GitHub</a>
-      <a class="btn" href="https://www.linkedin.com/in/iabhishekrao/">LinkedIn</a>
-      <a class="btn" href="https://medium.com/@rao-simplifies">Medium</a>
-      <a class="btn" href="Abhishek-Rao-Resume.pdf">Résumé (PDF)</a>
+      <a class="btn" href="https://github.com/raoket" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a class="btn" href="https://www.linkedin.com/in/iabhishekrao/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a class="btn" href="https://medium.com/@rao-simplifies" target="_blank" rel="noopener noreferrer">Medium</a>
+      <a class="btn" href="Abhishek-Rao-Resume.pdf" target="_blank" rel="noopener">Résumé (PDF)</a>
     </div>
     <p class="foot-note">
       Built as a single self-contained HTML file, no framework and no build step, because
