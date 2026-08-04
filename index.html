@@ -41,7 +41,7 @@
   --bg:#faf8f3; --bg-alt:#f3efe6; --bg-card:#fffefb;
   --fg:#1a1c19; --fg-mid:#545750; --fg-dim:#66695f;
   --line:#e7e1d5; --line-strong:#d5cec0;
-  --accent:#0f6b66; --accent-soft:#e4efed; --accent-2:#b3603a;
+  --accent:#0f6b66; --accent-soft:#e4efed; --accent-2:#b3603a; --accent-2-text:#9c502e;
   --grain:.028;
   --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
   --sans:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
@@ -54,7 +54,7 @@
     --bg:#141512; --bg-alt:#1a1b17; --bg-card:#1c1d19;
     --fg:#eceae2; --fg-mid:#a8aa9e; --fg-dim:#7f8177;
     --line:#292a24; --line-strong:#3a3c33;
-    --accent:#62c3b8; --accent-soft:#16241f; --accent-2:#e0956a;
+    --accent:#62c3b8; --accent-soft:#16241f; --accent-2:#e0956a; --accent-2-text:#e0956a;
     --grain:.05;
   }
 }
@@ -62,14 +62,14 @@
   --bg:#141512; --bg-alt:#1a1b17; --bg-card:#1c1d19;
   --fg:#eceae2; --fg-mid:#a8aa9e; --fg-dim:#7f8177;
   --line:#292a24; --line-strong:#3a3c33;
-  --accent:#62c3b8; --accent-soft:#16241f; --accent-2:#e0956a;
+  --accent:#62c3b8; --accent-soft:#16241f; --accent-2:#e0956a; --accent-2-text:#e0956a;
   --grain:.05;
 }
 :root[data-theme="light"]{
   --bg:#faf8f3; --bg-alt:#f3efe6; --bg-card:#fffefb;
   --fg:#1a1c19; --fg-mid:#545750; --fg-dim:#66695f;
   --line:#e7e1d5; --line-strong:#d5cec0;
-  --accent:#0f6b66; --accent-soft:#e4efed; --accent-2:#b3603a;
+  --accent:#0f6b66; --accent-soft:#e4efed; --accent-2:#b3603a; --accent-2-text:#9c502e;
   --grain:.028;
 }
 
@@ -145,8 +145,16 @@ h1{
   background:var(--accent-2); border-radius:2px;
 }
 .role{font-size:clamp(17px,2.2vw,20px); color:var(--fg-mid); margin:0 0 26px}
-.lede{font-size:clamp(17px,2vw,19.5px); color:var(--fg-mid); max-width:62ch; margin:0 0 32px}
+.lede{font-size:clamp(17.5px,2.1vw,20.5px); color:var(--fg-mid); max-width:60ch; margin:0 0 20px; line-height:1.62}
 .lede strong{color:var(--fg); font-weight:600}
+/* One word carried in the serif, so the sentence has a beat in it. */
+.lede em{font-family:var(--serif); font-style:italic; font-size:1.1em; color:var(--fg)}
+/* The kicker: personality, set apart from the pitch above it. */
+.kicker-line{
+  font-family:var(--serif); font-style:italic; font-size:clamp(16px,1.8vw,18px);
+  color:var(--accent-2-text); margin:0 0 30px; padding-left:15px;
+  border-left:2px solid var(--accent-2); max-width:52ch; line-height:1.5;
+}
 .cta{display:flex; flex-wrap:wrap; gap:11px}
 .btn{
   display:inline-flex; align-items:center; gap:8px;
@@ -360,10 +368,14 @@ footer h2{margin-bottom:12px}
     <h1>Abhishek Rao</h1>
     <p class="role">Solutions Architect at Tigera, the company behind Project Calico</p>
     <p class="lede">
-      I make enterprise Kubernetes security land in real customer environments. That means
-      designing the architecture, proving it in a PoC on the customer's own platform, and
-      <strong>building the tooling that makes the next one faster</strong>. Ten years in
-      networking, from trackside transit systems to multi-cloud container platforms.
+      I make enterprise Kubernetes security <em>land</em> in real customer environments.
+      That means designing the architecture, proving it in a PoC on the customer's own
+      platform, and <strong>building the tooling that makes the next one faster</strong>.
+      Ten years in networking, from trackside transit systems to multi-cloud container
+      platforms.
+    </p>
+    <p class="kicker-line">
+      Fair warning: I will over-engineer a demo until it feels like a magic trick.
     </p>
     <div class="cta">
       <a class="btn primary" href="#work">
